@@ -11,6 +11,7 @@ import { notFound } from '@/middleware/notFound'
 import cacheService from '@/services/cacheService'
 import { createLogger } from '@/utils/logger'
 import { database } from '@/config/database'
+import { ensureIndexes } from '@/scripts/ensureIndexes'
 import artworkRoutes from '@/routes/artwork'
 import userRoutes from '@/routes/user'
 import aiRoutes from '@/routes/ai'
@@ -73,6 +74,10 @@ app.listen(PORT, async () => {
   try {
     await database.connect()
     logger.info('🗄️ Database connection established')
+    
+    // Ensure database indexes are created
+    await ensureIndexes()
+    logger.info('🔍 Database indexes verified and created')
   } catch (error) {
     logger.error('Failed to connect to database:', error)
   }
